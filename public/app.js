@@ -619,8 +619,26 @@ app.placeOrder = evt => {
       undefined,
       payload,
       (statusCode, responsePayload) => {
-        // if (statusCode === 200)
-          console.log(responsePayload)
+        if (statusCode === 200) {
+          alert(`Transaction with id ${responsePayload.id} completed successfully`)
+
+          const cartTable = document.querySelector('#cart')
+          const ctaItems = document.querySelectorAll('#itemsTable a')
+
+          const cartTableLength = cartTable.rows.length
+
+          for (let i = 0; i < cartTableLength - 2; i++) {
+            cartTable.deleteRow(1)
+          }
+
+          ctaItems.forEach(item => {
+            if (item.classList.contains('disabled') && !item.classList.contains('green')) {
+              item.classList.remove('disabled')
+              item.classList.add('green')
+              item.addEventListener('click', app.addItemsToCart)
+            }
+          })
+        }
       }
     )
   } else {
